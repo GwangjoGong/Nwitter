@@ -1,4 +1,4 @@
-import { dbService, storageService } from 'fbase'
+import { dbService, storageService } from '../fbase'
 import React, { useState } from 'react'
 
 const Nweet = ({ nweet, isOwner }) => {

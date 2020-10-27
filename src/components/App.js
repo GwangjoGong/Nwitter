@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import AppRouter from 'components/Router'
-import { authService } from 'fbase'
+import AppRouter from '../components/Router'
+import { authService } from '../fbase'
 
 function App() {
   const [init, setInit] = useState(false)
@@ -8,20 +8,23 @@ function App() {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    authService.onAuthStateChanged(function (user) {
+    const unsubscribe = authService.onAuthStateChanged(function (user) {
       if (user) {
-        setIsLoggedIn(true)
         setUser({
           displayName: user.displayName,
           uid: user.uid,
           updateProfile: (args) => user.updateProfile(args)
         })
+        setIsLoggedIn(true)
       } else {
         setIsLoggedIn(false)
         setUser(null)
       }
       setInit(true)
     })
+    return () => {
+      unsubscribe()
+    }
   }, [])
 
   const refreshUser = () => {
